@@ -8,7 +8,7 @@ public class Connect {
 	private final String PASSWORD = "";
 	private final String DATABASE = "calouseif";
 	private final String HOST = "localhost:3306";	
-	private final String CONNECTION = String.format("jdbc:mysql://%s/%S", HOST, DATABASE);
+	private final String CONNECTION = String.format("jdbc:mysql://%s/%s", HOST, DATABASE);
 	
 	public ResultSet rs;
 	public ResultSetMetaData rsm;
@@ -18,7 +18,7 @@ public class Connect {
 	private static Connect connect;
 	
 	public static Connect getInstance() {
-		if (connect == null) return new Connect();
+		if (connect == null) connect = new Connect();
 		return connect;
 	}
 	
