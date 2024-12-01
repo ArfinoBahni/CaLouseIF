@@ -24,6 +24,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import util.Connect;
+import view.LoginView;
 import view.RegisterView;
 
 public class Main extends Application{
@@ -40,7 +41,7 @@ public class Main extends Application{
 //		setActions();
 //		stage.setTitle("Register");
 //		stage.setScene(scene);
-		new RegisterView(stage);
+		new LoginView(stage);
 		stage.show();	
 	}
 }

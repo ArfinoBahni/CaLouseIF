@@ -1,5 +1,6 @@
 package view;
 
+import controller.UserController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -23,9 +24,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import util.Connect;
 
-public class RegisterView implements EventHandler<ActionEvent> {
+public class RegisterView {
 	
-	Stage stage;
 	Scene scene;
 	BorderPane borderContainer;
 	HBox horizontalContainer;
@@ -33,14 +33,12 @@ public class RegisterView implements EventHandler<ActionEvent> {
 	FlowPane flowContainer;
 	
 	Text titleText;
-	Button registerButton;
+	Button registerButton, loginRedirectBtn;
 	Label usernameLabel, passwordLabel, phoneNumberLabel, addressLabel, roleLabel;
 	TextField usernameField, phoneNumberField, addressField, roleField;
 	PasswordField passwordField;
 	ToggleGroup roleGroup;
 	RadioButton buyerRadioButton, sellerRadioButton;
-	
-	private Connect connect = Connect.getInstance();
 	
 	//styling
 	private void setStyles() {
@@ -77,6 +75,7 @@ public class RegisterView implements EventHandler<ActionEvent> {
 		//init components
 		titleText = new Text("Register now");
 		registerButton = new Button("Register");
+		loginRedirectBtn = new Button("Login");
 		
 		usernameLabel = new Label("Username");
 		passwordLabel = new Label("Password");
@@ -108,6 +107,7 @@ public class RegisterView implements EventHandler<ActionEvent> {
 		gridContainer.add(phoneNumberLabel, 0, 2);
 		gridContainer.add(addressLabel, 0, 3);
 		gridContainer.add(roleLabel, 0, 4);
+		gridContainer.add(loginRedirectBtn, 0, 5);
 		
 		//set fields
 		gridContainer.add(usernameField, 1, 0);
@@ -119,78 +119,49 @@ public class RegisterView implements EventHandler<ActionEvent> {
 		flowContainer.getChildren().addAll(buyerRadioButton, sellerRadioButton);
 		gridContainer.add(flowContainer, 1, 4);
 	}
-
-//    registerButton.setOnAction(new EventHandler<ActionEvent>() {
-//        @Override
-//        public void handle(ActionEvent event) {
-//            handleRegister(usernameField, passwordField, phoneNumberField, addressField, roleGroup);
-//        }
-//    });
-	
-	
-	public void setActions() {
-		registerButton.setOnAction(this);
-	}
-	
-	
-	private void addUser(String username, String password, String phoneNumber, String address, String role) {
-		// insert register user to DB
-		String query = "INSERT INTO users "
-				+ "VALUES('0', '"+ username +"','"+ password +"', '"+ phoneNumber +"', '"+ address +"', '"+ role +"')";
-		connect.execUpdate(query);
-	}
-	
-	 private void handleRegister(TextField usernameField, PasswordField passwordField, TextField phoneNumberField, TextField addressField, ToggleGroup roleGroup) {
-	        // Validation logic
-	        RadioButton selectedRadioButton = (RadioButton) roleGroup.getSelectedToggle();
-	        String toggleGroupValue = selectedRadioButton != null ? selectedRadioButton.getText() : null;
-
-	        if (usernameField.getText().length() < 3 || passwordField.getText().length() < 8 ||
-	            !phoneNumberField.getText().contains("+62") || phoneNumberField.getText().length() != 13 ||
-	            addressField.getText().isEmpty() || toggleGroupValue == null) {
-	            System.out.println("Invalid input");
-	            return;
-	        }
-
-	        String username = usernameField.getText();
-	        String password = passwordField.getText();
-	        String phoneNumber = phoneNumberField.getText();
-	        String address = addressField.getText();
-
-	        addUser (username, password, phoneNumber, address, toggleGroupValue);
-	        System.out.println("User  added");
-	    }
-
-	
-	@Override
-	public void handle(ActionEvent event) {
-		// TODO Auto-generated method stub
-		RadioButton selectedRadioButton = (RadioButton) roleGroup.getSelectedToggle();
-		String toggleGroupValue = selectedRadioButton.getText();
-		if(event.getSource() == registerButton) {
-			//validation password blom lengkap
-			if (usernameField.getText().length()< 3 || passwordField.getText().length() < 8 || !phoneNumberField.getText().contains("+62") || 
-					phoneNumberField.getText().length() != 12 || addressField.getText().isEmpty() || toggleGroupValue.isEmpty())  {
-				System.out.println("Invalid input");
-				return;
-			}
-			String username = usernameField.getText();
-			String password = passwordField.getText();
-			String phoneNumber = phoneNumberField.getText();
-			String address = addressField.getText();
-			
-			addUser(username, password, phoneNumber, address, toggleGroupValue);
-			System.out.println("User added");
-		}
-	}
 	
 	public RegisterView (Stage stage) {
-		this.stage = stage;
 		initialize();
 		setStyles();
-		setActions();
+		setActions(stage);
 		stage.setTitle("Register");
 		stage.setScene(scene);
 		stage.show();
 	}
+	
+	public void setActions(Stage stage) {
+		registerButton.setOnAction((EventHandler<ActionEvent>) e -> {
+			handleRegister();
+			if(handleRegister()) new LoginView(stage);
+		});
+		loginRedirectBtn.setOnAction(e -> {
+			new LoginView(stage);
+		});
+	}
+	
+	
+	 private boolean handleRegister() {
+	        RadioButton selectedRadioButton = (RadioButton) roleGroup.getSelectedToggle();
+	        String toggleGroupValue = selectedRadioButton != null ? selectedRadioButton.getText() : null;
+	        String username = usernameField.getText();
+	        String password = passwordField.getText();
+	        String phoneNumber = phoneNumberField.getText();
+	        String address = addressField.getText();
+//	        System.out.println(username + password + phoneNumber + address + toggleGroupValue);
+	        String message = UserController.register(username, password, phoneNumber, address, toggleGroupValue);
+	        System.out.println(message);
+	        
+	        if (message.equals("Invalid input") || message.equals("Register Failed")) return false;
+	        return true;
+	    }
+
+	
+//	@Override
+//	public void handle(ActionEvent event) {
+//		// TODO Auto-generated method stub
+//		if(event.getSource() == registerButton) {
+//			handleRegister();
+//		}
+//	}
+	
 }

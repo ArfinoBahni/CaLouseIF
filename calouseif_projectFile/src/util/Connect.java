@@ -13,7 +13,7 @@ public class Connect {
 	public ResultSet rs;
 	public ResultSetMetaData rsm;
 	
-	private Connection con;
+	private Connection con = null;
 	private Statement st;
 	private static Connect connect;
 	
@@ -31,6 +31,17 @@ public class Connect {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public PreparedStatement prepareStatement(String query) {
+		PreparedStatement ps = null;
+		try {
+			ps = con.prepareStatement(query);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ps;
 	}
 	
 	public ResultSet execQuery(String query) {
