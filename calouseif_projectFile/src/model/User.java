@@ -87,7 +87,7 @@ public class User {
 			ps.setString(1, user_name);
 			ps.setString(2, user_password);
 			ResultSet rs = ps.executeQuery();
-			while(rs.next()) {
+			if(rs.next()) {
 				int id = rs.getInt("user_id");
 				String username = rs.getString("username");
 				String password = rs.getString("password");

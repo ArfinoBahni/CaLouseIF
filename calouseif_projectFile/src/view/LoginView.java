@@ -27,6 +27,7 @@ import util.Connect;
 
 public class LoginView implements EventHandler<ActionEvent> {
 	
+	Stage stage;
 	Scene scene;
 	BorderPane borderContainer;
 	HBox horizontalContainer;
@@ -101,6 +102,7 @@ public class LoginView implements EventHandler<ActionEvent> {
 	}
 	
 	public LoginView (Stage stage) {
+		this.stage = stage;
 		initialize();
 		setStyles();
 		setActions(stage);
@@ -123,9 +125,9 @@ public class LoginView implements EventHandler<ActionEvent> {
 			String username = usernameField.getText();
 			String password = passwordField.getText();
 			User user = UserController.login(username, password);
-			if (user != null) System.out.println("User found");
+			if (user == null) System.out.println("User not found");
 			else {
-				System.out.println("user not found");
+				new HomeView(stage, user);
 			}
 		}
 	}

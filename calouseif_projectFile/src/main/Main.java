@@ -36,11 +36,6 @@ public class Main extends Application{
 
 	@Override
 	public void start(Stage stage) throws Exception {
-//		initialize();
-//		setStyles();
-//		setActions();
-//		stage.setTitle("Register");
-//		stage.setScene(scene);
 		new LoginView(stage);
 		stage.show();	
 	}
