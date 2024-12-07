@@ -98,4 +98,126 @@ public class Item {
 		return i;
 	}
 	
+	public static ArrayList<Item> getApprovedSellerItems(int sellerId) {
+		ArrayList<Item> i = new ArrayList<Item>();
+		Connect con = Connect.getInstance();
+		String query = "SELECT * FROM items WHERE STATUS = 'approved' AND seller_id = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		try {
+			ps.setInt(1, sellerId);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				int itemId = rs.getInt("item_id");
+				int seller_id = rs.getInt("seller_id");
+				String itemName = rs.getString("item_name");
+				String itemCategory = rs.getString("item_category");
+				String itemSize = rs.getString("item_size");
+				int itemPrice = rs.getInt("item_price");
+				String itemStatus = rs.getString("status");
+				i.add(new Item(itemId, seller_id, itemName, itemCategory, itemSize, itemPrice, itemStatus));
+;			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return i;
+	}
+	
+	public static void UploadItem(int sellerId, String itemName, String itemCategory, String itemSize, int itemPrice) {
+		Connect con = Connect.getInstance();
+		String query = "INSERT INTO items (seller_id, item_name, item_category, item_size, item_price) VALUES (?, ?, ?, ?, ?)";
+		PreparedStatement ps = con.prepareStatement(query);
+		try {
+			ps.setInt(1, sellerId);
+			ps.setString(2, itemName);
+			ps.setString(3, itemCategory);
+			ps.setString(4, itemSize);
+			ps.setInt(5, itemPrice);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void EditItem(String itemName, String itemCategory, String itemSize, int itemPrice, int itemId) {
+		Connect con = Connect.getInstance();
+		String query = "UPDATE items SET item_name = ?, item_category = ?, item_size = ?, item_price = ? WHERE item_id = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		try {
+			ps.setString(1, itemName);
+			ps.setString(2, itemCategory);
+			ps.setString(3, itemSize);
+			ps.setInt(4, itemPrice);
+			ps.setInt(5, itemId);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void DeleteItem(int itemId) {
+		Connect con = Connect.getInstance();
+		String query = "DELETE FROM items WHERE item_id = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		try {
+			ps.setInt(1, itemId);
+			ps.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static ArrayList<Item> getAllPendingItems() {
+		ArrayList<Item> i = new ArrayList<Item>();
+		Connect con = Connect.getInstance();
+		String query = "SELECT * FROM items WHERE STATUS = 'pending'";
+		PreparedStatement ps = con.prepareStatement(query);
+		try {
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				int itemId = rs.getInt("item_id");
+				int sellerId = rs.getInt("seller_id");
+				String itemName = rs.getString("item_name");
+				String itemCategory = rs.getString("item_category");
+				String itemSize = rs.getString("item_size");
+				int itemPrice = rs.getInt("item_price");
+				String itemStatus = rs.getString("status");
+				i.add(new Item(itemId, sellerId, itemName, itemCategory, itemSize, itemPrice, itemStatus));
+;			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return i;
+	}
+	
+	public static void ApproveItem(Item item) {
+		Connect con = Connect.getInstance();
+		String query = "UPDATE items SET status = 'approved' WHERE item_id = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		try {
+			ps.setInt(1, item.item_id);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void DeclineItem(Item item) {
+		Connect con = Connect.getInstance();
+		String query = "UPDATE items SET status = 'declined' WHERE item_id = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		try {
+			ps.setInt(1, item.item_id);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }
