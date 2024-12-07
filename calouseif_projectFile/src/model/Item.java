@@ -17,8 +17,9 @@ public class Item {
 	private String item_size;
 	private int item_price;
 	private String item_status;
+	private int buyerId;
 	public Item(int item_id, int seller_id, String item_name, String item_category, String item_size, int item_price,
-			String item_status) {
+			String item_status, int buyerId) {
 		super();
 		this.item_id = item_id;
 		this.seller_id = seller_id;
@@ -27,6 +28,7 @@ public class Item {
 		this.item_size = item_size;
 		this.item_price = item_price;
 		this.item_status = item_status;
+		this.buyerId = buyerId;
 	}
 	
 	public int getSeller_id() {
@@ -74,6 +76,15 @@ public class Item {
 		this.item_status = item_status;
 	}
 	
+	
+	public int getBuyerId() {
+		return buyerId;
+	}
+
+	public void setBuyerId(int buyerId) {
+		this.buyerId = buyerId;
+	}
+
 	public static ArrayList<Item> getAllApprovedItems() {
 		ArrayList<Item> i = new ArrayList<Item>();
 		Connect con = Connect.getInstance();
@@ -89,7 +100,8 @@ public class Item {
 				String itemSize = rs.getString("item_size");
 				int itemPrice = rs.getInt("item_price");
 				String itemStatus = rs.getString("status");
-				i.add(new Item(itemId, sellerId, itemName, itemCategory, itemSize, itemPrice, itemStatus));
+				int buyerId = rs.getInt("buyer_id");
+				i.add(new Item(itemId, sellerId, itemName, itemCategory, itemSize, itemPrice, itemStatus, buyerId));
 ;			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -114,7 +126,8 @@ public class Item {
 				String itemSize = rs.getString("item_size");
 				int itemPrice = rs.getInt("item_price");
 				String itemStatus = rs.getString("status");
-				i.add(new Item(itemId, seller_id, itemName, itemCategory, itemSize, itemPrice, itemStatus));
+				int buyerId = rs.getInt("buyer_id");
+				i.add(new Item(itemId, seller_id, itemName, itemCategory, itemSize, itemPrice, itemStatus, buyerId));
 ;			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -185,7 +198,8 @@ public class Item {
 				String itemSize = rs.getString("item_size");
 				int itemPrice = rs.getInt("item_price");
 				String itemStatus = rs.getString("status");
-				i.add(new Item(itemId, sellerId, itemName, itemCategory, itemSize, itemPrice, itemStatus));
+				int buyerId = rs.getInt("buyer_id");
+				i.add(new Item(itemId, sellerId, itemName, itemCategory, itemSize, itemPrice, itemStatus, buyerId));
 ;			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -220,4 +234,17 @@ public class Item {
 		}
 	}
 	
+	public static void UpdateBuyer(int buyerId, int itemId) {
+		Connect con = Connect.getInstance();
+		String query = "UPDATE items SET buyer_id = ? WHERE item_id = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		try {
+			ps.setInt(1, buyerId);
+			ps.setInt(2, itemId);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

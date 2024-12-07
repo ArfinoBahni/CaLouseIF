@@ -34,6 +34,9 @@ public class HomeView extends BorderPane{
 //	admin buttons
 	Button itemRequests;
 	
+//	buyer buttons
+	Button buyBtn, addWishlistBtn, wishlistPageBtn, makeOfferBtn, historyBtn;
+	
 	
 	public void initializeSeller(User user) {
 		approvedItemTable();
@@ -73,9 +76,29 @@ public class HomeView extends BorderPane{
 		gp = new GridPane();
 		scene = new Scene(this, 700, 500);
 		this.setTop(itemTable);
+		this.setCenter(gp);
 		
-
-		gp.add(itemTable, 0, 0);
+		buyBtn = new Button("Buy Item");
+		makeOfferBtn = new Button("Make Offer");
+		addWishlistBtn = new Button("Add to wishlist");
+		wishlistPageBtn = new Button("View my wishlist");
+		historyBtn = new Button("Purchase history");
+		
+		gp.add(buyBtn, 0, 0);
+		gp.add(makeOfferBtn, 1, 0);
+		gp.add(addWishlistBtn, 2, 0);
+		gp.add(wishlistPageBtn, 3, 0);
+		gp.add(historyBtn, 4, 0);
+		
+		buyBtn.setOnAction(e -> {
+			Item selectedItem = itemTable.getSelectionModel().getSelectedItem();
+			if(selectedItem == null) System.out.println("No item selected");
+			else new BuyItemView(stage, user, selectedItem);
+		});
+		
+		historyBtn.setOnAction(e -> {
+			new PurchaseHistoryPage(stage, user);
+		});
 	}
 	
 	public void initializeAdmin(User user) {
@@ -115,10 +138,10 @@ public class HomeView extends BorderPane{
 	}
 	
 	private void viewAllItems() {
+		itemTable.refresh();
 		ArrayList<Item> items = ItemController.getAllApprovedItems();
 		ObservableList<Item> itemOL = FXCollections.observableArrayList(items);
 		itemTable.setItems(itemOL);
-		itemTable.refresh();
 	}
 
 	public HomeView(Stage stage, User user) {

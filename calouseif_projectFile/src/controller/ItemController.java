@@ -59,4 +59,8 @@ public class ItemController {
 			Item.DeclineItem(item);
 		}
 	}
+	
+	public static void UpdateBuyer(int buyerId, int itemId) {
+		Item.UpdateBuyer(buyerId, itemId);
+	}
 }
