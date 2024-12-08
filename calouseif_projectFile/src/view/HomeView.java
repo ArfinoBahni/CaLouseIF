@@ -68,6 +68,10 @@ public class HomeView extends BorderPane{
 		deleteItemBtn.setOnAction(e -> {
 			new DeleteItemView(stage, user);
 		});
+		
+		offersBtn.setOnAction(e -> {
+			new SellerOffersView(stage, user);
+		});
 	}
 	
 	public void initializeBuyer(User user) {
@@ -98,6 +102,12 @@ public class HomeView extends BorderPane{
 		
 		historyBtn.setOnAction(e -> {
 			new PurchaseHistoryPage(stage, user);
+		});
+		
+		makeOfferBtn.setOnAction(e -> {
+			Item selectedItem = itemTable.getSelectionModel().getSelectedItem();
+			if(selectedItem == null) System.out.println("No item selected");
+			else new MakeOfferView(stage, user, selectedItem);
 		});
 	}
 	

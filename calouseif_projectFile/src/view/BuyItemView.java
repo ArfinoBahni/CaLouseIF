@@ -46,10 +46,7 @@ public class BuyItemView extends BorderPane{
 		gp.add(cancelBtn, 1, 5);
 		
 		confirmBtn.setOnAction(e -> {
-			TransactionController.PurchaseItem(user.getUserId(), item.getItem_id());
-			ItemController.UpdateBuyer(user.getUserId(), item.getItem_id());
-//			DeclineItem biar g muncul di table lg (udh kejual ceritanya)
-			ItemController.DeclineItem(item);
+			TransactionController.purchaseItem(user.getUserId(), item);
 			new HomeView(stage, user);
 		});
 		

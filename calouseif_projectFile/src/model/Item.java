@@ -17,9 +17,11 @@ public class Item {
 	private String item_size;
 	private int item_price;
 	private String item_status;
-	private int buyerId;
+	private String item_offer_status;
+	private int offer_price;
+	private int offering_user_id;
 	public Item(int item_id, int seller_id, String item_name, String item_category, String item_size, int item_price,
-			String item_status, int buyerId) {
+			String item_status, String item_offer_status, int offer_price, int offering_user_id) {
 		super();
 		this.item_id = item_id;
 		this.seller_id = seller_id;
@@ -28,7 +30,19 @@ public class Item {
 		this.item_size = item_size;
 		this.item_price = item_price;
 		this.item_status = item_status;
-		this.buyerId = buyerId;
+		this.item_offer_status = item_offer_status;
+		this.offer_price = offer_price;
+		this.offering_user_id = offering_user_id;
+	}
+	
+	//constructor for purchase history
+	public Item(int item_id, String item_name, String item_category, String item_size, int item_price) {
+		super();
+		this.item_id = item_id;
+		this.item_name = item_name;
+		this.item_category = item_category;
+		this.item_size = item_size;
+		this.item_price = item_price;
 	}
 	
 	public int getSeller_id() {
@@ -76,13 +90,28 @@ public class Item {
 		this.item_status = item_status;
 	}
 	
-	
-	public int getBuyerId() {
-		return buyerId;
+	public String getItem_offer_status() {
+		return item_offer_status;
 	}
 
-	public void setBuyerId(int buyerId) {
-		this.buyerId = buyerId;
+	public void setItem_offer_status(String item_offer_status) {
+		this.item_offer_status = item_offer_status;
+	}
+
+	public int getOffer_price() {
+		return offer_price;
+	}
+
+	public void setOffer_price(int offer_price) {
+		this.offer_price = offer_price;
+	}
+	
+	public int getOffering_user_id() {
+		return offering_user_id;
+	}
+
+	public void setOffering_user_id(int offering_user_id) {
+		this.offering_user_id = offering_user_id;
 	}
 
 	public static ArrayList<Item> getAllApprovedItems() {
@@ -100,8 +129,10 @@ public class Item {
 				String itemSize = rs.getString("item_size");
 				int itemPrice = rs.getInt("item_price");
 				String itemStatus = rs.getString("status");
-				int buyerId = rs.getInt("buyer_id");
-				i.add(new Item(itemId, sellerId, itemName, itemCategory, itemSize, itemPrice, itemStatus, buyerId));
+				String offerStatus = rs.getString("item_offer_status");
+				int offerPrice = rs.getInt("offer_price");
+				int offeringUser = rs.getInt("offering_user_id");
+				i.add(new Item(itemId, sellerId, itemName, itemCategory, itemSize, itemPrice, itemStatus, offerStatus, offerPrice, offeringUser));
 ;			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -126,8 +157,38 @@ public class Item {
 				String itemSize = rs.getString("item_size");
 				int itemPrice = rs.getInt("item_price");
 				String itemStatus = rs.getString("status");
-				int buyerId = rs.getInt("buyer_id");
-				i.add(new Item(itemId, seller_id, itemName, itemCategory, itemSize, itemPrice, itemStatus, buyerId));
+				String offerStatus = rs.getString("item_offer_status");
+				int offerPrice = rs.getInt("offer_price");
+				int offeringUser = rs.getInt("offering_user_id");
+				i.add(new Item(itemId, seller_id, itemName, itemCategory, itemSize, itemPrice, itemStatus, offerStatus, offerPrice, offeringUser));
+;			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return i;
+	}
+	
+	public static ArrayList<Item> getOfferedItems(int sellerId) {
+		ArrayList<Item> i = new ArrayList<Item>();
+		Connect con = Connect.getInstance();
+		String query = "SELECT * FROM items WHERE STATUS = 'approved' AND seller_id = ? AND offer_price  != 0";
+		PreparedStatement ps = con.prepareStatement(query);
+		try {
+			ps.setInt(1, sellerId);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				int itemId = rs.getInt("item_id");
+				int seller_id = rs.getInt("seller_id");
+				String itemName = rs.getString("item_name");
+				String itemCategory = rs.getString("item_category");
+				String itemSize = rs.getString("item_size");
+				int itemPrice = rs.getInt("item_price");
+				String itemStatus = rs.getString("status");
+				String offerStatus = rs.getString("item_offer_status");
+				int offerPrice = rs.getInt("offer_price");
+				int offeringUser = rs.getInt("offering_user_id");
+				i.add(new Item(itemId, seller_id, itemName, itemCategory, itemSize, itemPrice, itemStatus, offerStatus, offerPrice, offeringUser));
 ;			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -198,8 +259,10 @@ public class Item {
 				String itemSize = rs.getString("item_size");
 				int itemPrice = rs.getInt("item_price");
 				String itemStatus = rs.getString("status");
-				int buyerId = rs.getInt("buyer_id");
-				i.add(new Item(itemId, sellerId, itemName, itemCategory, itemSize, itemPrice, itemStatus, buyerId));
+				String offerStatus = rs.getString("item_offer_status");
+				int offerPrice = rs.getInt("offer_price");
+				int offeringUser = rs.getInt("offering_user_id");
+				i.add(new Item(itemId, sellerId, itemName, itemCategory, itemSize, itemPrice, itemStatus, offerStatus, offerPrice, offeringUser));
 ;			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -234,13 +297,40 @@ public class Item {
 		}
 	}
 	
-	public static void UpdateBuyer(int buyerId, int itemId) {
+	public static void DeclineOffer(Item item) {
 		Connect con = Connect.getInstance();
-		String query = "UPDATE items SET buyer_id = ? WHERE item_id = ?";
+		String query = "UPDATE items SET item_offer_status = 'declined' WHERE item_id = ?";
 		PreparedStatement ps = con.prepareStatement(query);
 		try {
-			ps.setInt(1, buyerId);
-			ps.setInt(2, itemId);
+			ps.setInt(1, item.item_id);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void AcceptOffer(Item item) {
+		Connect con = Connect.getInstance();
+		String query = "UPDATE items SET item_offer_status = 'accepted' WHERE item_id = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		try {
+			ps.setInt(1, item.item_id);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void makeOffer(int itemId, int userId, int offerPrice) {
+		Connect con = Connect.getInstance();
+		String query = "UPDATE items SET offer_price = ?, item_offer_status = 'pending', offering_user_id = ? WHERE item_id = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		try {
+			ps.setInt(1, offerPrice);
+			ps.setInt(2, userId);
+			ps.setInt(3, itemId);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
