@@ -29,7 +29,7 @@ public class SellerOffersView extends BorderPane{
 	TableColumn<Item, Integer> itemPrice;
 	TableColumn<Item, Integer> offerPrice;
 	
-	Button accept, decline;
+	Button accept, decline, backBtn;
 	
 	private void offeredItemsTable() {
 		itemTable = new TableView<Item>();
@@ -80,6 +80,12 @@ public class SellerOffersView extends BorderPane{
 		decline.setOnAction(e -> {
 			Item selectedItem = itemTable.getSelectionModel().getSelectedItem();
 			ItemController.DeclineOffer(selectedItem);
+			new HomeView(stage, user);
+		});
+		
+		backBtn = new Button("Back to home");
+		gp.add(backBtn, 0, 1);
+		backBtn.setOnAction(e -> {
 			new HomeView(stage, user);
 		});
 	}

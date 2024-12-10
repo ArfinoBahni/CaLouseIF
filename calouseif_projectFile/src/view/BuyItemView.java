@@ -2,6 +2,7 @@ package view;
 
 import controller.ItemController;
 import controller.TransactionController;
+import controller.WishlistContoller;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

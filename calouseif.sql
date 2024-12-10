@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2024 at 10:22 AM
+-- Generation Time: Dec 10, 2024 at 11:07 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -48,7 +48,9 @@ INSERT INTO `items` (`item_id`, `seller_id`, `item_name`, `item_category`, `item
 (2, 3, 'Tshirt', 'Top', 'S', 15000, 'declined', 'none', 0, NULL),
 (3, 3, 'Celana', 'Bottom', 'L', 25000, 'declined', 'none', 0, NULL),
 (5, 3, 'Short pants', 'Bottom', 'L', 30000, 'declined', 'none', 0, NULL),
-(7, 3, 'Long pants', 'Bottom', 'M', 30000, 'declined', 'accepted', 28000, 2);
+(7, 3, 'Long pants', 'Bottom', 'M', 30000, 'declined', 'accepted', 28000, 2),
+(8, 3, 'Jacket', 'top', 'M', 53000, 'declined', 'none', 0, NULL),
+(9, 3, 'Sweater', 'top', 'S', 40000, 'approved', 'none', 0, NULL);
 
 --
 -- Indexes for dumped tables
@@ -69,7 +71,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables

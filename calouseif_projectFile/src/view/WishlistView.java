@@ -2,7 +2,8 @@ package view;
 
 import java.util.ArrayList;
 
-import controller.ItemController;
+import controller.TransactionController;
+import controller.WishlistContoller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -15,12 +16,15 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import model.Item;
 import model.User;
+import model.Wishlist;
 
-public class ItemRequestView extends BorderPane {
-	
+public class WishlistView extends BorderPane{
 	Stage stage;
 	Scene scene;
 	User user;
+	Item item;
+	Wishlist wl;
+	
 	GridPane gp;
 	
 	TableView<Item> itemTable;
@@ -29,9 +33,9 @@ public class ItemRequestView extends BorderPane {
 	TableColumn<Item, String> itemSize;
 	TableColumn<Item, Integer> itemPrice;
 	
-	Button approve, decline, backBtn;
+	Button backBtn,removeWishlist;
 	
-	private void pendingItemTable() {
+	private void WishlistTable() {
 		itemTable = new TableView<Item>();
 		itemName = new TableColumn<>("Item Name");
 		itemName.setCellValueFactory(new PropertyValueFactory<>("item_name"));
@@ -46,57 +50,52 @@ public class ItemRequestView extends BorderPane {
 		itemTable.getColumns().add(itemCategory);
 		itemTable.getColumns().add(itemSize);
 		itemTable.getColumns().add(itemPrice);
-		viewPendingItems();
+		viewPurchaseHistory();
 	}
 	
-	private void viewPendingItems() {
+	private void viewPurchaseHistory() {
 		itemTable.refresh();
-		ArrayList<Item> items = ItemController.getAllPendingItems();
+		ArrayList<Item> items = WishlistContoller.getWishlist(user.getUserId());
 		ObservableList<Item> itemOL = FXCollections.observableArrayList(items);
 		itemTable.setItems(itemOL);
 	}
 	
 	private void init() {
 		// TODO Auto-generated method stub
-		pendingItemTable();
+		WishlistTable();
 		gp = new GridPane();
 		scene = new Scene(this, 700, 500);
 		this.setTop(itemTable);
 		this.setCenter(gp);
 		
-		approve = new Button("Approve Item");
-		decline = new Button("Decline Item");
-		gp.add(approve, 0, 0);
-		gp.add(decline, 1, 0);
-		
-		approve.setOnAction(e -> {
-			Item selectedItem = itemTable.getSelectionModel().getSelectedItem();
-			ItemController.ApproveItem(selectedItem);
-			new HomeView(stage, user);
-		});
-		
-		decline.setOnAction(e -> {
-			Item selectedItem = itemTable.getSelectionModel().getSelectedItem();
-			ItemController.DeclineItem(selectedItem);
-			new HomeView(stage, user);
-		});
-		
-		backBtn = new Button("Back to home");
+		backBtn = new Button("Back to home page");
+		removeWishlist = new Button("Remove from wishlist");
+		gp.add(removeWishlist, 0, 0);
 		gp.add(backBtn, 0, 1);
+		
 		backBtn.setOnAction(e -> {
+			new HomeView(stage, user);
+		});
+		
+		removeWishlist.setOnAction(e -> {
+			Item selectedItem = itemTable.getSelectionModel().getSelectedItem();
+			System.out.println(selectedItem.getItem_id() + " " + user.getUserId());
+			if(selectedItem == null) System.out.println("No item selected");
+			else WishlistContoller.deleteWishlistUser(selectedItem.getItem_id(), user.getUserId());
 			new HomeView(stage, user);
 		});
 	}
 	
-	public ItemRequestView(Stage stage, User user) {
+	public WishlistView(Stage stage, User user) {
 		super();
 		this.stage = stage;
 		this.user = user;
 		init();
+		stage.setTitle("Wishlist");
 		stage.setScene(scene);
-		stage.setTitle("Item Requests");
 		stage.show();
 	}
+
 	
 	
 }

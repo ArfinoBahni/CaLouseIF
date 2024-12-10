@@ -21,7 +21,7 @@ public class MakeOfferView extends BorderPane{
 	
 	Label itemNameLbl, currentPriceLbl, currentOfferLbl, yourOffer, descriptionText;
 	TextField offerField;
-	Button makeOfferBtn;
+	Button makeOfferBtn, backBtn;
 	
 	private void init() {
 		// TODO Auto-generated method stub
@@ -48,6 +48,12 @@ public class MakeOfferView extends BorderPane{
 		makeOfferBtn.setOnAction(e -> {
 			int offerPrice = Integer.parseInt(offerField.getText());
 			ItemController.makeOffer(item, offerPrice);
+			new HomeView(stage, user);
+		});
+		
+		backBtn = new Button("Back to home");
+		gp.add(backBtn, 0, 6);
+		backBtn.setOnAction(e -> {
 			new HomeView(stage, user);
 		});
 	}

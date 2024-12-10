@@ -37,7 +37,7 @@ public class PurchaseHistoryPage extends BorderPane{
 	
 	private void HistoryItemTable() {
 		itemTable = new TableView<Item>();
-		itemId = new TableColumn<>("Item Id");
+		itemId = new TableColumn<>("Transaction Id");
 		itemId.setCellValueFactory(new PropertyValueFactory<>("item_id"));
 		itemName = new TableColumn<>("Item Name");
 		itemName.setCellValueFactory(new PropertyValueFactory<>("item_name"));
@@ -73,6 +73,10 @@ public class PurchaseHistoryPage extends BorderPane{
 		
 		backBtn = new Button("Back to home page");
 		gp.add(backBtn, 0, 0);
+		
+		backBtn.setOnAction(e -> {
+			new HomeView(stage, user);
+		});
 	}
 	
 	public PurchaseHistoryPage(Stage stage, User user) {

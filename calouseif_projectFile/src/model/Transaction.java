@@ -68,19 +68,19 @@ public class Transaction {
 	public static ArrayList<Item> getPurchaseHistory(int userID) {
 		ArrayList<Item> i = new ArrayList<Item>();
 		Connect con = Connect.getInstance();
-		String query = "SELECT items.item_id, items.item_name, items.item_category, items.item_size, items.item_price "
+		String query = "SELECT transactions.transaction_id, items.item_name, items.item_category, items.item_size, items.item_price "
 				+ "FROM transactions JOIN items ON transactions.item_id=items.item_id WHERE transactions.buyer_id = ?";
 		PreparedStatement ps = con.prepareStatement(query);
 		try {
 			ps.setInt(1, userID);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
-				int itemId = rs.getInt("item_id");
+				int transactionId = rs.getInt("transaction_id");
 				String itemName = rs.getString("item_name");
 				String itemCategory = rs.getString("item_category");
 				String itemSize = rs.getString("item_size");
 				int itemPrice = rs.getInt("item_price");
-				i.add(new Item(itemId,itemName, itemCategory, itemSize, itemPrice));
+				i.add(new Item(transactionId,itemName, itemCategory, itemSize, itemPrice));
 ;			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

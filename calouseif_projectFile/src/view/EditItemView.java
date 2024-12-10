@@ -32,7 +32,7 @@ public class EditItemView extends BorderPane{
 	GridPane gp;
 	Label nameLbl, categoryLbl, sizeLbl, priceLbl;
 	TextField nameField, categoryField, sizeField, priceField;
-	Button submitEditBtn;
+	Button submitEditBtn, backBtn;
 	
 	TableView<Item> itemTable;
 	TableColumn<Item, String> itemName;
@@ -104,6 +104,12 @@ public class EditItemView extends BorderPane{
 			String size = sizeField.getText();
 			int price = Integer.parseInt(priceField.getText()); 
 			ItemController.EditItem(name, category, size, price, tempId);
+			new HomeView(stage, user);
+		});
+		
+		backBtn = new Button("Back to home");
+		gp.add(backBtn, 1, 4);
+		backBtn.setOnAction(e -> {
 			new HomeView(stage, user);
 		});
 	}

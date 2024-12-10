@@ -36,9 +36,9 @@ public class Item {
 	}
 	
 	//constructor for purchase history
-	public Item(int item_id, String item_name, String item_category, String item_size, int item_price) {
+	public Item(int id, String item_name, String item_category, String item_size, int item_price) {
 		super();
-		this.item_id = item_id;
+		this.item_id = id;
 		this.item_name = item_name;
 		this.item_category = item_category;
 		this.item_size = item_size;

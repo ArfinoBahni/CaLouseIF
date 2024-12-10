@@ -3,6 +3,7 @@ package view;
 import java.util.ArrayList;
 
 import controller.ItemController;
+import controller.WishlistContoller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -36,6 +37,9 @@ public class HomeView extends BorderPane{
 	
 //	buyer buttons
 	Button buyBtn, addWishlistBtn, wishlistPageBtn, makeOfferBtn, historyBtn;
+	
+//	logout button
+	Button logout;
 	
 	
 	public void initializeSeller(User user) {
@@ -109,6 +113,16 @@ public class HomeView extends BorderPane{
 			if(selectedItem == null) System.out.println("No item selected");
 			else new MakeOfferView(stage, user, selectedItem);
 		});
+		
+		addWishlistBtn.setOnAction(e -> {
+			Item selectedItem = itemTable.getSelectionModel().getSelectedItem();
+			if(selectedItem == null) System.out.println("No item selected");
+			else WishlistContoller.addToWishlist(user.getUserId(), selectedItem.getItem_id());
+		});
+		
+		wishlistPageBtn.setOnAction(e -> {
+			new WishlistView(stage, user);
+		});
 	}
 	
 	public void initializeAdmin(User user) {
@@ -173,6 +187,12 @@ public class HomeView extends BorderPane{
 //			roleLabel = new Label(role);
 			initializeAdmin(user);
 		}
+		
+		logout = new Button("Logout");
+		gp.add(logout, 0, 1);
+		logout.setOnAction(e -> {
+			new LoginView(stage);
+		});
 
 		stage.setTitle("Home");
 		stage.setScene(scene);

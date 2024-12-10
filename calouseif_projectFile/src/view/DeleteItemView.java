@@ -24,7 +24,7 @@ public class DeleteItemView extends BorderPane{
 	GridPane gp;
 	
 	Label headerLbl;
-	Button deleteItem;
+	Button deleteItem, backBtn;
 	
 	TableView<Item> itemTable;
 	TableColumn<Item, String> itemName;
@@ -75,7 +75,14 @@ public class DeleteItemView extends BorderPane{
 		
 		deleteItem.setOnAction(e -> {
 			Item selectedItem = itemTable.getSelectionModel().getSelectedItem();
-			ItemController.DeleteItem(selectedItem.getItem_id());
+			if (selectedItem == null) System.out.println("No item selected");
+			else ItemController.DeleteItem(selectedItem.getItem_id());
+			new HomeView(stage, user);
+		});
+		
+		backBtn = new Button("Back to home");
+		gp.add(backBtn, 1, 1);
+		backBtn.setOnAction(e -> {
 			new HomeView(stage, user);
 		});
 	}

@@ -11,12 +11,14 @@ public class TransactionController {
 		Transaction.purchaseItem(UserId, item.getItem_id());
 //		DeclineItem supaya ngga muncul di table lagi (udh dibeli ceritanya)
 		ItemController.DeclineItem(item);
+		WishlistContoller.deleteWishlistAll(item.getItem_id());
 	}
 	
 	public static void createTransaction(Item item) {
 		Transaction.createTransaction(item);
 //		DeclineItem supaya ngga muncul di table lagi (udh dibeli ceritanya)
 		ItemController.DeclineItem(item);
+		WishlistContoller.deleteWishlistAll(item.getItem_id());
 	}
 	
 	public static ArrayList<Item> getPurchaseHistory(int userID) {

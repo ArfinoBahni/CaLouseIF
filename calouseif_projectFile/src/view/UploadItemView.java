@@ -19,7 +19,7 @@ public class UploadItemView extends BorderPane{
 	GridPane gp;
 	Label nameLbl, categoryLbl, sizeLbl, priceLbl;
 	TextField nameField, categoryField, sizeField, priceField;
-	Button uploadBtn;
+	Button uploadBtn, backBtn;
 	
 	
 	private void init() {
@@ -56,6 +56,12 @@ public class UploadItemView extends BorderPane{
 			String size = sizeField.getText();
 			int price = Integer.parseInt(priceField.getText());
 			ItemController.UploadItem(user.getUserId(), name, category, size, price);
+			new HomeView(stage, user);
+		});
+		
+		backBtn = new Button("Back to home");
+		gp.add(backBtn, 0, 5);
+		backBtn.setOnAction(e -> {
 			new HomeView(stage, user);
 		});
 		
