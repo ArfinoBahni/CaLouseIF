@@ -82,13 +82,17 @@ public class ItemController {
 		}
 	}
 	
-	public static void makeOffer(Item item, int offerPrice) {
+	public static void makeOffer(Item item, int buyerId, int offerPrice) {
 		if(offerPrice <= item.getOffer_price()) {
 			System.out.println("Offer price cannot be lower than current offer price");
 		}
 		else {
-			Item.makeOffer(item.getItem_id(), item.getOffering_user_id(), offerPrice);
+			Item.makeOffer(item.getItem_id(), buyerId, offerPrice);
 		}
+	}
+	
+	public static void addReason(int itemId, String reason) {
+		Item.addReason(itemId, reason);
 	}
 	
 	

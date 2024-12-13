@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 10, 2024 at 11:07 AM
+-- Generation Time: Dec 13, 2024 at 02:52 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -37,20 +37,24 @@ CREATE TABLE `items` (
   `status` enum('pending','approved','declined') DEFAULT 'pending',
   `item_offer_status` enum('none','pending','accepted','declined') DEFAULT 'none',
   `offer_price` int(11) DEFAULT 0,
-  `offering_user_id` int(11) DEFAULT NULL
+  `offering_user_id` int(11) DEFAULT NULL,
+  `reason` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `items`
 --
 
-INSERT INTO `items` (`item_id`, `seller_id`, `item_name`, `item_category`, `item_size`, `item_price`, `status`, `item_offer_status`, `offer_price`, `offering_user_id`) VALUES
-(2, 3, 'Tshirt', 'Top', 'S', 15000, 'declined', 'none', 0, NULL),
-(3, 3, 'Celana', 'Bottom', 'L', 25000, 'declined', 'none', 0, NULL),
-(5, 3, 'Short pants', 'Bottom', 'L', 30000, 'declined', 'none', 0, NULL),
-(7, 3, 'Long pants', 'Bottom', 'M', 30000, 'declined', 'accepted', 28000, 2),
-(8, 3, 'Jacket', 'top', 'M', 53000, 'declined', 'none', 0, NULL),
-(9, 3, 'Sweater', 'top', 'S', 40000, 'approved', 'none', 0, NULL);
+INSERT INTO `items` (`item_id`, `seller_id`, `item_name`, `item_category`, `item_size`, `item_price`, `status`, `item_offer_status`, `offer_price`, `offering_user_id`, `reason`) VALUES
+(2, 3, 'Tshirt', 'Top', 'S', 15000, 'declined', 'none', 0, NULL, NULL),
+(3, 3, 'Celana', 'Bottom', 'L', 25000, 'declined', 'none', 0, NULL, NULL),
+(5, 3, 'Short pants', 'Bottom', 'L', 30000, 'declined', 'none', 0, NULL, NULL),
+(7, 3, 'Long pants', 'Bottom', 'M', 30000, 'declined', 'accepted', 28000, 2, NULL),
+(8, 3, 'Jacket', 'top', 'M', 53000, 'declined', 'none', 0, NULL, NULL),
+(9, 3, 'Sweater', 'top', 'S', 40000, 'approved', 'pending', 32000, 4, NULL),
+(10, 3, 'air jordang', 'shoes', '39', 80000, 'declined', 'none', 0, NULL, 'Deny request reason: Item in bad condition'),
+(11, 3, 'erforswan', 'shoes', '40', 40000, 'declined', 'accepted', 35000, 0, NULL),
+(12, 3, 'adadis', 'shoes', '40', 50000, 'declined', 'accepted', 45000, 0, 'Deny offer reason: too cheap');
 
 --
 -- Indexes for dumped tables
@@ -71,7 +75,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables

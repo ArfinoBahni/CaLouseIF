@@ -77,8 +77,9 @@ public class ItemRequestView extends BorderPane {
 		
 		decline.setOnAction(e -> {
 			Item selectedItem = itemTable.getSelectionModel().getSelectedItem();
-			ItemController.DeclineItem(selectedItem);
-			new HomeView(stage, user);
+			if (selectedItem == null) System.out.println("No item selected");
+			else new ReasonView(stage, user, selectedItem);
+//			ItemController.DeclineItem(selectedItem);
 		});
 		
 		backBtn = new Button("Back to home");

@@ -73,14 +73,16 @@ public class SellerOffersView extends BorderPane{
 		
 		accept.setOnAction(e -> {
 			Item selectedItem = itemTable.getSelectionModel().getSelectedItem();
-			ItemController.AcceptOffer(selectedItem);
+			if (selectedItem == null) System.out.println("No item selected");
+			else ItemController.AcceptOffer(selectedItem);
 			new HomeView(stage, user);
 		});
 		
 		decline.setOnAction(e -> {
 			Item selectedItem = itemTable.getSelectionModel().getSelectedItem();
-			ItemController.DeclineOffer(selectedItem);
-			new HomeView(stage, user);
+			if (selectedItem == null) System.out.println("No item selected");
+			else new ReasonView(stage, user, selectedItem);
+//			ItemController.DeclineOffer(selectedItem);
 		});
 		
 		backBtn = new Button("Back to home");

@@ -47,7 +47,7 @@ public class MakeOfferView extends BorderPane{
 		
 		makeOfferBtn.setOnAction(e -> {
 			int offerPrice = Integer.parseInt(offerField.getText());
-			ItemController.makeOffer(item, offerPrice);
+			ItemController.makeOffer(item, user.getUserId(), offerPrice);
 			new HomeView(stage, user);
 		});
 		

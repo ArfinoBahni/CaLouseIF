@@ -20,8 +20,9 @@ public class Item {
 	private String item_offer_status;
 	private int offer_price;
 	private int offering_user_id;
+	private String reason;
 	public Item(int item_id, int seller_id, String item_name, String item_category, String item_size, int item_price,
-			String item_status, String item_offer_status, int offer_price, int offering_user_id) {
+			String item_status, String item_offer_status, int offer_price, int offering_user_id, String reason) {
 		super();
 		this.item_id = item_id;
 		this.seller_id = seller_id;
@@ -33,6 +34,7 @@ public class Item {
 		this.item_offer_status = item_offer_status;
 		this.offer_price = offer_price;
 		this.offering_user_id = offering_user_id;
+		this.reason = reason;
 	}
 	
 	//constructor for purchase history
@@ -113,6 +115,13 @@ public class Item {
 	public void setOffering_user_id(int offering_user_id) {
 		this.offering_user_id = offering_user_id;
 	}
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 
 	public static ArrayList<Item> getAllApprovedItems() {
 		ArrayList<Item> i = new ArrayList<Item>();
@@ -132,7 +141,8 @@ public class Item {
 				String offerStatus = rs.getString("item_offer_status");
 				int offerPrice = rs.getInt("offer_price");
 				int offeringUser = rs.getInt("offering_user_id");
-				i.add(new Item(itemId, sellerId, itemName, itemCategory, itemSize, itemPrice, itemStatus, offerStatus, offerPrice, offeringUser));
+				String reason = rs.getString("reason");
+				i.add(new Item(itemId, sellerId, itemName, itemCategory, itemSize, itemPrice, itemStatus, offerStatus, offerPrice, offeringUser, reason));
 ;			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -160,7 +170,8 @@ public class Item {
 				String offerStatus = rs.getString("item_offer_status");
 				int offerPrice = rs.getInt("offer_price");
 				int offeringUser = rs.getInt("offering_user_id");
-				i.add(new Item(itemId, seller_id, itemName, itemCategory, itemSize, itemPrice, itemStatus, offerStatus, offerPrice, offeringUser));
+				String reason = rs.getString("reason");
+				i.add(new Item(itemId, seller_id, itemName, itemCategory, itemSize, itemPrice, itemStatus, offerStatus, offerPrice, offeringUser, reason));
 ;			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -188,7 +199,8 @@ public class Item {
 				String offerStatus = rs.getString("item_offer_status");
 				int offerPrice = rs.getInt("offer_price");
 				int offeringUser = rs.getInt("offering_user_id");
-				i.add(new Item(itemId, seller_id, itemName, itemCategory, itemSize, itemPrice, itemStatus, offerStatus, offerPrice, offeringUser));
+				String reason = rs.getString("reason");
+				i.add(new Item(itemId, seller_id, itemName, itemCategory, itemSize, itemPrice, itemStatus, offerStatus, offerPrice, offeringUser, reason));
 ;			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -262,7 +274,8 @@ public class Item {
 				String offerStatus = rs.getString("item_offer_status");
 				int offerPrice = rs.getInt("offer_price");
 				int offeringUser = rs.getInt("offering_user_id");
-				i.add(new Item(itemId, sellerId, itemName, itemCategory, itemSize, itemPrice, itemStatus, offerStatus, offerPrice, offeringUser));
+				String reason = rs.getString("reason");
+				i.add(new Item(itemId, sellerId, itemName, itemCategory, itemSize, itemPrice, itemStatus, offerStatus, offerPrice, offeringUser, reason));
 ;			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -331,6 +344,20 @@ public class Item {
 			ps.setInt(1, offerPrice);
 			ps.setInt(2, userId);
 			ps.setInt(3, itemId);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void addReason(int itemId, String reason) {
+		Connect con = Connect.getInstance();
+		String query = "UPDATE items SET reason = ? WHERE item_id = ?";
+		PreparedStatement ps = con.prepareStatement(query);
+		try {
+			ps.setString(1, reason);
+			ps.setInt(2, itemId);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
